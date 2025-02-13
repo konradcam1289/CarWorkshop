@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,15 +24,11 @@ public class OrderService {
         this.serviceRepository = serviceRepository;
     }
 
-    public Order createOrder(String username, List<Integer> serviceIds, LocalDateTime appointmentDate, String paymentMethod) {
+    public Order createOrder(String username, List<Long> serviceIds, LocalDateTime appointmentDate, String paymentMethod) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        List<Long> longServiceIds = serviceIds.stream()
-                .map(Integer::longValue)
-                .collect(Collectors.toList());
-
-        List<WorkshopService> services = serviceRepository.findAllById(longServiceIds);
+        List<WorkshopService> services = serviceRepository.findAllById(serviceIds);
 
         Order order = new Order();
         order.setUser(user);
@@ -44,7 +39,7 @@ public class OrderService {
 
         if (paymentMethod.equalsIgnoreCase("cash")) {
             order.setReserved(true);
-            services.forEach(service -> service.setAvailable(false)); // Oznacz jako niedostępne
+            services.forEach(service -> service.setAvailable(false)); // Oznacz usługę jako niedostępną
             serviceRepository.saveAll(services);
         }
 
@@ -62,10 +57,9 @@ public class OrderService {
     }
 
     public void updateOrderStatus(Long orderId, OrderStatus status) {
-        Optional<Order> order = orderRepository.findById(orderId);
-        order.ifPresent(o -> {
-            o.setStatus(status);
-            orderRepository.save(o);
-        });
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Zamówienie nie znalezione"));
+        order.setStatus(status);
+        orderRepository.save(order);
     }
 }

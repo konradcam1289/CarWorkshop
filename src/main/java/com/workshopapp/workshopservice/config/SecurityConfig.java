@@ -29,18 +29,18 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**", "/api/users/**").permitAll()
-                        .requestMatchers("/services/**").permitAll()  // 🔹 MUSI być dodane!
-                        .requestMatchers("/api/appointments/**").hasAnyAuthority("ROLE_CLIENT", "ROLE_ADMIN")
+                        .requestMatchers("/api/services/**").permitAll()
+                        .requestMatchers("/api/appointments/available").permitAll()
                         .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers("/worker/**").hasAuthority("ROLE_WORKER")
                         .requestMatchers("/client/**").hasAuthority("ROLE_CLIENT")
+                        .requestMatchers("/api/orders/create").permitAll() // ✅ Tylko klient może tworzyć zamówienia
+                        .requestMatchers("/api/orders/user").permitAll() // ✅ Tylko klient może pobierać swoje zamówienia
                         .anyRequest().authenticated()
                 );
 
         return http.build();
     }
-
-
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {

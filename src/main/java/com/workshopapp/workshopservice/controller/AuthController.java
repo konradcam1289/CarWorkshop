@@ -14,6 +14,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -33,11 +36,8 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody RegisterRequest request) {
         User user = userService.registerUser(request);
-
-        // Pobranie roli użytkownika BEZ dodawania podwójnego `ROLE_`
         String role = user.getPrimaryRole();
 
-        // Automatyczne logowanie po rejestracji
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
         );
@@ -45,7 +45,11 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtService.generateToken(authentication);
 
-        return ResponseEntity.ok(new JwtResponse(jwt, role));
+        Map<String, Object> response = new HashMap<>();
+        response.put("token", jwt);
+        response.put("username", user.getUsername());
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/login")
@@ -58,17 +62,29 @@ public class AuthController {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String jwt = jwtService.generateToken(authentication);
 
-            // ✅ Pobieramy rolę BEZPOŚREDNIO Z BAZY, aby uniknąć podwójnego `ROLE_`
             String role = userRepository.findByUsername(request.getUsername())
                     .orElseThrow(() -> new RuntimeException("User not found"))
                     .getPrimaryRole();
 
-            System.out.println("DEBUG: Rola użytkownika -> " + role); // 🔹 Logowanie do konsoli
+            Map<String, Object> response = new HashMap<>();
+            response.put("token", jwt);
+            response.put("username", request.getUsername());
+            response.put("role", role);
 
-            return ResponseEntity.ok(new JwtResponse(jwt, role));
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
-            System.err.println("Błąd logowania: " + e.getMessage());
             return ResponseEntity.status(401).body("Błędne dane logowania");
         }
+    }
+
+    // 🆕 ✅ Nowy endpoint, aby frontend mógł pobrać username na podstawie tokena
+    @GetMapping("/user")
+    public ResponseEntity<?> getCurrentUser(Authentication authentication) {
+        if (authentication == null) {
+            return ResponseEntity.status(401).body("Brak autoryzacji");
+        }
+
+        String username = authentication.getName();
+        return ResponseEntity.ok(Map.of("username", username));
     }
 }

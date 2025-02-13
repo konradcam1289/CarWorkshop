@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByUser(User user);
-
     List<Order> findByUser_UsernameAndReservedIsTrue(String username);
+    List<Order> findByUser_Username(String username); // Nowa metoda do wyszukiwania po nazwie użytkownika
 }

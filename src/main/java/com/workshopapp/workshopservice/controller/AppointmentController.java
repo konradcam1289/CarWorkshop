@@ -8,6 +8,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/appointments")
+@CrossOrigin(origins = "http://localhost:5173") // ✅ Zezwalamy na połączenia z frontendem
 public class AppointmentController {
 
     private final AppointmentService appointmentService;
@@ -18,6 +19,7 @@ public class AppointmentController {
 
     @GetMapping("/available")
     public List<Appointment> getAvailableAppointments() {
+        System.out.println("📌 Pobieranie dostępnych terminów...");
         return appointmentService.getAvailableAppointments();
     }
 }
