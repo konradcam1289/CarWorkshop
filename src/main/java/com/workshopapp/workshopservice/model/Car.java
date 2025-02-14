@@ -12,11 +12,10 @@ public class Car {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String make; // Marka samochodu
-    private String model; // Model samochodu
-    private int year; // Rok produkcji
+    private String make;
+    private String model;
+    private int year;
 
-    // Gettery i settery
     public Long getId() {
         return id;
     }

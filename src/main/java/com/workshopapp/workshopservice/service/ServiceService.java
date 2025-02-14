@@ -15,7 +15,7 @@ public class ServiceService {
 
     public List<WorkshopService> getAllServices() {
         List<WorkshopService> services = serviceRepository.findAll();
-        System.out.println("📢 Usługi w bazie: " + services.size()); // Dodaj log
+        System.out.println("📢 Usługi w bazie: " + services.size());
         return services;
     }
 }

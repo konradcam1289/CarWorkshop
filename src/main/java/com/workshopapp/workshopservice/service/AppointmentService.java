@@ -16,6 +16,6 @@ public class AppointmentService {
     }
 
     public List<Appointment> getAvailableAppointments() {
-        return appointmentRepository.findByAvailableTrue(); // Pobieramy tylko dostępne terminy
+        return appointmentRepository.findByAvailableTrue();
     }
 }

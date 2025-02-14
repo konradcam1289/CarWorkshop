@@ -40,11 +40,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
-    // Konstruktor bezargumentowy
     public User() {
     }
 
-    // Konstruktor z argumentami
     public User(String username, String email, String password, String firstName, String lastName,
                 String phoneNumber, String address, Set<Role> roles) {
         this.username = username;
@@ -58,7 +56,6 @@ public class User {
         this.registeredAt = LocalDateTime.now();
     }
 
-    // Gettery i Settery
     public Long getId() {
         return id;
     }
@@ -139,8 +136,7 @@ public class User {
         this.roles = roles;
     }
 
-    // Metoda pomocnicza do pobierania głównej roli użytkownika
     public String getPrimaryRole() {
-        return roles.stream().findFirst().map(Enum::name).orElse("ROLE_CLIENT"); // Domyślna rola
+        return roles.stream().findFirst().map(Enum::name).orElse("ROLE_CLIENT");
     }
 }

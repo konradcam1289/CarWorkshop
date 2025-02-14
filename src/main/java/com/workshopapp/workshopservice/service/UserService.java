@@ -27,7 +27,7 @@ public class UserService {
         User user = new User(
                 request.getUsername(),
                 request.getEmail(),
-                passwordEncoder.encode(request.getPassword()), // 🔹 Tutaj pobieramy poprawnie hasło
+                passwordEncoder.encode(request.getPassword()),
                 request.getFirstName(),
                 request.getLastName(),
                 request.getPhoneNumber(),

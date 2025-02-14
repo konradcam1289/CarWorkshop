@@ -33,7 +33,7 @@ public class Order {
     private OrderStatus status;
 
     @Column(nullable = false)
-    private boolean reserved; // NOWE POLE: Czy usługa została zarezerwowana
+    private boolean reserved;
 
     public Long getId() {
         return id;

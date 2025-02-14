@@ -13,9 +13,9 @@ public class CorsConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**") // Umożliwia dostęp do wszystkich endpointów
-                        .allowedOrigins("http://localhost:5173") // Dopuszczamy Reacta
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Dopuszczone metody
+                registry.addMapping("/**")
+                        .allowedOrigins("http://localhost:5173")
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
             }

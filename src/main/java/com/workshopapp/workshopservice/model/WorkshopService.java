@@ -24,7 +24,7 @@ public class WorkshopService {
     private double price;
 
     @Column(nullable = false)
-    private boolean available = true; // NOWE POLE: Czy usługa jest dostępna
+    private boolean available = true;
 
     public Long getId() {
         return id;

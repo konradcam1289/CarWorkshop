@@ -34,9 +34,14 @@ public class SecurityConfig {
                         .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers("/worker/**").hasAuthority("ROLE_WORKER")
                         .requestMatchers("/client/**").hasAuthority("ROLE_CLIENT")
-                        .requestMatchers("/api/orders/create").permitAll() // ✅ Tylko klient może tworzyć zamówienia
-                        .requestMatchers("/api/orders/user").permitAll() // ✅ Tylko klient może pobierać swoje zamówienia
+                        .requestMatchers("/api/orders/create").permitAll()
+                        .requestMatchers("/api/orders/user").permitAll()
+                        .requestMatchers("/oauth2/**", "/login/oauth2/**").permitAll()
                         .anyRequest().authenticated()
+                )
+                .oauth2Login(oauth2 -> oauth2
+                        .defaultSuccessUrl("http://localhost:5173/client/home", true)
+                        .failureUrl("/login?error=true")
                 );
 
         return http.build();

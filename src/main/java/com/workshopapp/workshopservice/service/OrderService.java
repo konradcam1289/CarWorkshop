@@ -39,7 +39,7 @@ public class OrderService {
 
         if (paymentMethod.equalsIgnoreCase("cash")) {
             order.setReserved(true);
-            services.forEach(service -> service.setAvailable(false)); // Oznacz usługę jako niedostępną
+            services.forEach(service -> service.setAvailable(false));
             serviceRepository.saveAll(services);
         }
 

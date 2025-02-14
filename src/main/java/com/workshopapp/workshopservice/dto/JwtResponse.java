@@ -2,7 +2,7 @@ package com.workshopapp.workshopservice.dto;
 
 public class JwtResponse {
     private String token;
-    private String role; // 🔹 Dodajemy pole roli
+    private String role;
 
     public JwtResponse(String token, String role) {
         this.token = token;

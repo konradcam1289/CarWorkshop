@@ -15,7 +15,7 @@ public class Appointment {
     private LocalDateTime date;
 
     @Column(nullable = false)
-    private boolean available = true; // True jeśli termin jest dostępny
+    private boolean available = true;
 
     public Appointment() {}
 
